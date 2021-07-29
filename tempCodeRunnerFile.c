@@ -1,0 +1,6 @@
+
+    
+    }
+    fclose(txt);
+    fclose(ftr);
+}
