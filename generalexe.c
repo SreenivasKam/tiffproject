@@ -29,10 +29,10 @@ void opentifffile(){
     int minimunifd=1,k=0;
     long data1,data2;
     int Imagelength,Rowsperstrip,Stripoffset,Stripoffsetcount,StripBytecounts,StripoffsetType;
-    int StripBytecountType,StripBytecountscount,ImageWidth;
+    int StripBytecountType,StripBytecountscount,ImageWidth,Sampleperpixel;
     char c;
     FILE *txt;
-    txt=fopen("D:/FINAL YEAR PROJECT/sample_bin_uc11.txt","wb");
+    txt=fopen("D:/FINAL YEAR PROJECT/sample_bin_uc13.txt","wb");
     struct TIFF_header Tiffheader;
     struct IFD_header Ifdheader;
 
@@ -40,7 +40,7 @@ void opentifffile(){
     //FILE *fp = fopen("D:/FINAL YEAR PROJECT/work/faximage_aTw5.tif","rb");
     //D:/FINAL YEAR PROJECT/maketiff4.tiff
     //D:/FINAL YEAR PROJECT/maketiff45678.tiff
-    FILE *fp = fopen("C:/Users/sreen/Downloads/SampleUncompressed.tiff","rb");
+    FILE *fp = fopen("D:/FINAL YEAR PROJECT/Sample2_1pg.tiff","rb");
     //FILE *fp = fopen("D:/FINAL YEAR PROJECT/maketiffer3.tiff","rb");
     //FILE *fp = fopen("D:/FINAL YEAR PROJECT/maketiff45678.tiff","rb");
     printf("\n----------------------TIFF FILE HEADER--------------------------\n\n");
@@ -87,6 +87,9 @@ void opentifffile(){
         StripBytecounts = Ifdheader.Taglist[i].value;
         StripBytecountType = Ifdheader.Taglist[i].Type;
         StripBytecountscount = Ifdheader.Taglist[i].count;
+    }
+    if(Ifdheader.Taglist[i].TAG==277){
+        Sampleperpixel = Ifdheader.Taglist[i].value;
     }
     
 
@@ -150,7 +153,7 @@ void opentifffile(){
             fseek(fp,array[i],SEEK_SET);
             while(pixels!=barray[i]){
                 pixels++;
-                if((width)%1729==0){
+                if((width)%((ImageWidth*Sampleperpixel)+1)==0){
                     fputc('\n',txt);
                     width = 1;
                 }
@@ -158,12 +161,13 @@ void opentifffile(){
             fread(&c,sizeof(char),1,fp);
             if(c&&1 == 1)
                 {
-                    fputc('0',txt);
+                        fputc('0',txt);
+                    
                     //fputc('1',txt);//before the changes
                 }
             else
                 {
-                    fputc('1',txt);
+                        fputc('1',txt);
                     //fputc('0',txt);//before the changes
                 }
             }
